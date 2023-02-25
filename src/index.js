@@ -1,14 +1,14 @@
 const promisesInFlight = {};
 
 const fake_fetch = async (data, timeout = 200) => {
-	const wait = new promise((resolve, reject) => {
+	const wait = new Promise((resolve, reject) => {
 		setTimeout(() => {
 			// return reject("not cancelled");
 			resolve();
-		}, timeout * i);
+		}, timeout);
 	});
 
-	await wait();
+	await wait;
 
 	return data;
 };
@@ -41,23 +41,23 @@ const loadProgram = async (stream) => {
 		.forEach((inFlightStream) => {
 			// delete promisesInFlight[inFlightStream];
 			promisesInFlight[inFlightStream].forEach((promise) => {
-				console.log(promise);
 				promise.cancel();
-				console.log(promise);
 			});
 		});
 
 	// create all promises belonging to this stream.
 	console.log("creating all");
 	for (let i = 1; i <= 10; i++) {
-		const newPromise = createPromise((resolve, reject) => {
-			setTimeout(() => {
-				// return reject("not cancelled");
-				resolve(`hello from inside stream ${stream}:${i}`);
-			}, 200 * i);
+		const newPromise = createPromise(async (resolve, reject) => {
+			const res = fake_fetch(
+				`hello from inside stream ${stream}:${i}`,
+				200 * i
+			);
+			await res;
+			resolve(res);
 		});
 
-		newPromise.then((data) => {
+		newPromise.promise.then((data) => {
 			console.log(data);
 		});
 
