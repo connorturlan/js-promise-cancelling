@@ -17,6 +17,12 @@ const fake_fetch = async (data, timeout = 200) => {
 };
 
 const loadProgram = async (stream) => {
+	// clear the content list.
+	const content = document.getElementById("content");
+	while (content.lastChild) {
+		content.removeChild(content.lastChild);
+	}
+
 	// cancel all pending promises.
 	console.log("cancelling all previous streams.");
 	Object.keys(promisesInFlight)
@@ -42,7 +48,13 @@ const loadProgram = async (stream) => {
 
 		// set the resolve condition.
 		newPromise.promise.then((data) => {
+			// populate content.
 			console.log(data);
+
+			const row = document.createElement("h2");
+			row.innerText = data;
+
+			content.appendChild(row);
 		});
 
 		// add the promise to the stream.
