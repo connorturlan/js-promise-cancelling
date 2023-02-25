@@ -1,3 +1,12 @@
+@keyframes fadeIn {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
 h2 {
 	margin: 2px;
 	padding: 6px 12px;
@@ -6,6 +15,8 @@ h2 {
 	border-radius: 10px;
 
 	background-color: #fefefe;
+
+	animation: fadeIn 0.1s;
 }
 
 button {

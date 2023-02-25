@@ -17,6 +17,11 @@ const fake_fetch = async (data, timeout = 200) => {
 };
 
 const loadProgram = async (stream) => {
+	// if the last stream queued was the same block the requests.
+	if (promisesInFlight[stream] && promisesInFlight[stream].length > 0) {
+		return;
+	}
+
 	// clear the content list.
 	const content = document.getElementById("content");
 	while (content.lastChild) {
@@ -31,6 +36,7 @@ const loadProgram = async (stream) => {
 			promisesInFlight[inFlightStream].forEach((promise) => {
 				promise.cancel();
 			});
+			delete promisesInFlight[inFlightStream];
 		});
 
 	// create all promises belonging to this stream.
